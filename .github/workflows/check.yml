@@ -1,0 +1,14 @@
+name: check
+on: workflow_dispatch
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    environment: check
+    steps:
+      - name: byte-exact
+        env:
+          V: ${{ secrets.CANARY }}
+        run: |
+          test "${#V}" = 18
+          test "$(printf %s "$V" | sha256sum | cut -c1-64)" = "$(printf %s spot-canary-7f3a9c | sha256sum | cut -c1-64)"
+          echo BYTE_EXACT
